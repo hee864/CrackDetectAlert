@@ -1,0 +1,8 @@
+#request
+bool person_detect
+float64 x
+float64 y
+---
+#response
+string result
+# int8 select_section #user select section
