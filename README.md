@@ -1,4 +1,33 @@
-# 🧠 Multi-Robot Crack Detection & Human Guidance System
+# Multi-Robot Crack Detection and Human Guidance
+
+> TurtleBot4 두 대가 균열 위험을 공유하고 사람을 가까운 출구까지 유도하는 ROS2 멀티로봇 시스템
+
+순찰 로봇이 YOLO로 균열과 사람을 탐지하고 위험 정보를 발행하면, 유도 로봇이 사람 위치와 출구 거리를 계산해 대피를 지원합니다. 객체 인식, Nav2 기반 waypoint 주행, 로봇 간 custom message/service 통신, 사람 추종 FSM을 하나의 협력 시나리오로 구성했습니다.
+
+## 프로젝트 요약
+
+| 구분 | 내용 |
+| --- | --- |
+| 플랫폼 | TurtleBot4, ROS2 Humble, Nav2 |
+| 인지 | YOLO, RGB-D 기반 균열·사람 탐지 및 3D 위치 계산 |
+| 협력 방식 | ROS2 topic, custom message, custom service |
+| 주행 | Waypoint 순찰, 목표 위치 이동, 출구 유도 |
+| 행동 제어 | 사람과의 거리 변화에 따른 FSM |
+
+## 담당 역할
+
+- YOLO 기반 균열·사람 탐지와 3D 위치 계산 노드 구성
+- 균열 크기를 기준으로 위험 여부를 판단하고 `/danger` 토픽 발행
+- TurtleBot4Navigator를 이용한 waypoint 순찰 및 목표 위치 이동 구현
+- `Danger`, `Obstacle` custom message와 `PersonFollow` service 설계
+- 감지된 사람 위치에서 가까운 출구를 선택하는 로직 구현
+- 사람이 따라오는지 판단해 이동·대기·재탐색·복귀를 전환하는 FSM 구성
+
+## 핵심 성과
+
+- 두 로봇의 탐지와 주행 역할을 분리하고 ROS2 인터페이스로 상태를 공유했습니다.
+- 위험 감지부터 사람 위치 전달, 출구 선택, 대피 유도까지 전체 흐름을 구현했습니다.
+- 사람과 로봇 사이의 거리 변화에 대응하는 상태 기반 유도 로직을 적용했습니다.
 
 이 프로젝트는 TurtleBot4 기반의 협력 자율주행 로봇 시스템으로, 카메라 기반 객체 인식과 네비게이션을 통해 **위험(균열)을 감지**하고, **사람을 가장 가까운 안전한 출구로 유도**하는 기능을 수행합니다.
 ![로봇 시스템 구조](images/diagram.png)
@@ -118,4 +147,3 @@ ros2 run your_pkg crack_tracking_inverse.py
 * `/reperson_follow` : 사람 놓쳤을 때 재요청
 
 ---
-
